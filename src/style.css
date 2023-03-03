@@ -60,20 +60,25 @@ input {
   height: 18px;
   margin-right: 9px;
 }
+
 .text {
   width: 90%;
 }
+
 .text.complete {
   text-decoration: line-through;
 }
+
 .newlist.complete li {
   text-decoration: line-through;
 }
+
 .delete {
   border-style: none;
   width: 18px;
   height: 18px;
 }
+
 .clear-button {
   height: 40px;
   display: flex;
