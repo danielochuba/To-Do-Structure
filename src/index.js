@@ -51,6 +51,16 @@ function updateList(todos) {
           `).join('');
 
   todoList.innerHTML = description;
+  const inputTexts = todoList.querySelectorAll('.todo-list-item input[type=text]');
+
+  inputTexts.forEach((input) => input.addEventListener('change', (e) => updateInputText(input.id, e.target.value)));
+
+  const deleteButtons = todoList.querySelectorAll('.todo-list-item button');
+
+  deleteButtons.forEach((button) => button.addEventListener('click', () => removeTodo(button.parentNode.getAttribute('data-id'))));
+
+  const completedCheckboxes = todoList.querySelectorAll('.checkbox');
+  completedCheckboxes.forEach((checkbox) => checkbox.addEventListener('click', () => toggleComplete(checkbox.parentNode.getAttribute('data-id'))));
 }
 
 function newTodo(e) {
