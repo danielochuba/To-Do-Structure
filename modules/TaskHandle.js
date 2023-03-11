@@ -1,24 +1,24 @@
-const todoList = document.querySelector('.todo-list');
+const taskSection = document.querySelector('.task-section');
 /**
  * Updates the todos list with new items.
  * @param {Array} newTodos An array of new todo items to update the list with.
  */
-const updateTodos = (newTodos) => {
-  const updatedTodos = newTodos.map((todo, index) => ({ ...todo, id: index + 1 }));
+const tasksRefactor = (newTodos) => {
+  const updtArr = newTodos.map((todo, index) => ({ ...todo, id: index + 1 }));
 
-  localStorage.setItem('todos', JSON.stringify(updatedTodos));
+  localStorage.setItem('todos', JSON.stringify(updtArr));
 
-  const description = updatedTodos.map(
-    (todo) => `
-        <li class="card todo-list-item ${todo.completed ? 'completed' : ''}" data-id="${todo.id}">
-          <input type="checkbox" ${todo.completed ? 'checked' : ''} class="checkbox"/>
-          <input type="text" value="${todo.description}" class="inputtext" id="${todo.id}"/>
-          <button type="button">🗑</button>
+  const description = updtArr.map(
+    (task) => `
+        <li class="fill task-list ${task.completed ? 'completed' : ''}" data-id="${task.id}">
+          <input type="checkbox" ${task.completed ? 'checked' : ''} class="checkbox"/>
+          <input type="text" value="${task.description}" class="inputtext" id="${task.id}"/>
+          <button type="button"><i class="fa-solid fa-trash-can"></i></button>
         </li>
       `,
   ).join('');
 
-  todoList.innerHTML = description;
+  taskSection.innerHTML = description;
 };
 
-export default updateTodos;
+export default tasksRefactor;

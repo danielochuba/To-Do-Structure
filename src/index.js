@@ -1,23 +1,22 @@
 import './style.css';
-import updateTodos from '../modules/TaskHandle.js';
+import tasksRefactor from '../modules/TaskHandle.js';
 
-const newTodoForm = document.querySelector('#new-todo-form');
-const todoList = document.querySelector('.todo-list');
-const clear = document.querySelector('.clearComplete');
+const newTodoForm = document.querySelector('#form-sec');
+const todoList = document.querySelector('.task-section');
+const removeMarked = document.querySelector('.clearComplete');
 
-function updateInputText(id, newText) {
+const updateInputText = (id, newText) => {
   const todoListArray = JSON.parse(localStorage.getItem('todos') || '[]');
-  const updateTodoList = todoListArray.map((todo) => {
-    if (todo.id === parseInt(id, 10)) {
-      return { ...todo, description: newText };
-    }
-    return todo;
-  });
+  const targetIndex = todoListArray.findIndex((todo) => todo.id === parseInt(id, 10));
 
-  updateTodos(updateTodoList);
-}
+  if (targetIndex >= 0) {
+    todoListArray[targetIndex].description = newText;
+    localStorage.setItem('todos', JSON.stringify(todoListArray));
+    tasksRefactor(todoListArray);
+  }
+};
 
-function toggleComplete(id) {
+const toggleComplete = (id) => {
   const todoListArray = JSON.parse(localStorage.getItem('todos') || '[]');
   const updateTodoList = todoListArray.map((todo) => {
     if (todo.id === parseInt(id, 10)) {
@@ -26,68 +25,80 @@ function toggleComplete(id) {
     return todo;
   });
 
-  updateTodos(updateTodoList);
-}
+  tasksRefactor(updateTodoList);
+  // eslint-disable-next-line no-restricted-globals
+  location.reload();
+};
 
 const removeCompleted = () => {
-  const todoListArr = JSON.parse(localStorage.getItem('todos') || '[]');
-  const updateList = todoListArr.filter((todo) => todo.completed !== true);
-  updateTodos(updateList);
+  const updtArr = [];
+  const todoListArray = JSON.parse(localStorage.getItem('todos') || '[]');
+
+  // eslint-disable-next-line no-restricted-syntax
+  for (const todo of todoListArray) {
+    if (!todo.completed) {
+      updtArr.push(todo);
+    }
+  }
+
+  localStorage.setItem('todos', JSON.stringify(updtArr));
+  tasksRefactor(updtArr);
 };
 
 const removeTodo = (targetIndex) => {
   const todoListArr = JSON.parse(localStorage.getItem('todos') || '[]');
   const updateList = todoListArr.filter((todo) => todo.id !== parseInt(targetIndex, 10));
-  updateTodos(updateList);
+  tasksRefactor(updateList);
+  // eslint-disable-next-line no-restricted-globals
+  location.reload();
 };
 
-function updateList(todos) {
+const updateList = (todos) => {
   const description = todos.map((todo) => `
-            <li class="card todo-list-item ${todo.completed ? 'completed' : ''}" data-id="${todo.id}">
+            <li class="fill task-list ${todo.completed ? 'completed' : ''}" data-id="${todo.id}">
               <input type="checkbox" ${todo.completed ? 'checked' : ''} class="checkbox"/>
               <input type="text" value="${todo.description}" class="inputtext" id="${todo.id}"/>
-              <button type="button">🗑</button>
+              <button type="button"><i class="fa-solid fa-trash-can"></i></button>
             </li>
           `).join('');
 
   todoList.innerHTML = description;
-  const inputTexts = todoList.querySelectorAll('.todo-list-item input[type=text]');
+  const enteredTexts = todoList.querySelectorAll('.task-list input[type=text]');
 
-  inputTexts.forEach((input) => input.addEventListener('change', (e) => updateInputText(input.id, e.target.value)));
+  enteredTexts.forEach((input) => input.addEventListener('change', (e) => updateInputText(input.id, e.target.value)));
 
-  const deleteButtons = todoList.querySelectorAll('.todo-list-item button');
+  const erase = todoList.querySelectorAll('.task-list button');
 
-  deleteButtons.forEach((button) => button.addEventListener('click', () => removeTodo(button.parentNode.getAttribute('data-id'))));
+  erase.forEach((button) => button.addEventListener('click', () => removeTodo(button.parentNode.getAttribute('data-id'))));
 
-  const completedCheckboxes = todoList.querySelectorAll('.checkbox');
-  completedCheckboxes.forEach((checkbox) => checkbox.addEventListener('click', () => toggleComplete(checkbox.parentNode.getAttribute('data-id'))));
-}
+  const checkedUP = todoList.querySelectorAll('.checkbox');
+  checkedUP.forEach((checkbox) => checkbox.addEventListener('click', () => toggleComplete(checkbox.parentNode.getAttribute('data-id'))));
+};
 
-function newTodo(e) {
+const newTodo = (e) => {
   e.preventDefault();
-  const newTask = document.getElementById('new-task').value;
+  const newTask = document.getElementById('taskInput').value;
   const todos = JSON.parse(localStorage.getItem('todos') || '[]');
 
   const newTodo = {
     description: newTask,
     completed: false,
-    id: todos[todos.length - 1] ? todos[todos.length - 1].id + 1 : todos.length + 1,
+    id: Date.now(),
   };
 
-  document.getElementById('new-task').value = '';
-  const updatedTodos = [...todos, newTodo];
-  localStorage.setItem('todos', JSON.stringify(updatedTodos));
-  updateList(updatedTodos);
-}
+  document.getElementById('taskInput').value = '';
+  localStorage.setItem('todos', JSON.stringify([...todos, newTodo]));
+  updateList([...todos, newTodo]);
+};
 
-function init() {
+const addDisplay = () => {
   newTodoForm.addEventListener('submit', newTodo);
   const todos = JSON.parse(localStorage.getItem('todos') || '[]');
   updateList(todos);
-}
+};
 
-clear.addEventListener('click', () => {
+removeMarked.addEventListener('click', () => {
   removeCompleted();
 });
 
-init();
+addDisplay();

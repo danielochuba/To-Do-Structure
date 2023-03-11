@@ -2,12 +2,8 @@
 body {
   font-size: 1rem;
   padding: 5% 30%;
-  background-color: #ccc;
+  background-color: rgb(255, 255, 255);
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-}
-
-input {
-  font-size: 1rem;
 }
 
 button {
@@ -16,65 +12,50 @@ button {
 
 .container {
   display: flex;
-  flex-direction: row;
   flex-wrap: wrap;
-  justify-content: stretch;
-  align-items: stretch;
-  margin: 0 auto;
+  background-color: #e0e0e0;
 }
 
 .container * {
   flex-basis: 100%;
 }
 
-.row {
+.fill {
   display: flex;
-  justify-items: stretch;
-  align-content: stretch;
-}
-
-.row * {
-  flex-grow: 1;
-}
-
-.card {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
   padding: 1rem;
-  background: #fffa;
-  border: 1px solid #aaa;
-  border-radius: 0.25rem;
+  border-bottom: 1px solid rgb(255, 255, 255);
 }
 
-.card:last-child {
+.fill:last-child {
   margin-bottom: 0;
 }
 
-.new-todo-form {
-  padding: 0;
-  margin: 0 auto;
+.form-sec .fill input {
+  border: none;
+  background: none;
 }
 
-.new-todo-form .card input {
-  flex-grow: 1;
-  width: 0;
-  margin-right: 1rem;
-  padding: 0.5rem;
-  border: 1px solid #aaa;
+.form-sec{
+  background: navajowhite;
+  border: 1px solid #f3b14e;
+  border-radius: 10px 10px 0 0;
 }
 
-.new-todo-form .card button {
-  flex-grow: 0;
-  flex-shrink: 1;
+.form-sec .fill button {
   flex-basis: 3.5rem;
-  background-color: #eee;
-  border-color: #aaa;
-  padding: 0.5rem;
+  padding: 0.4rem;
+  background: #ffc521;
+  color: #fff;
+  border: none;
+  cursor: pointer;
 }
 
-.todo-list {
+.form-sec .fill button:hover{
+  background-color: #ffffff;
+  color: rgb(1, 1, 1);
+}
+
+.task-section {
   list-style: none;
   margin: 0;
   padding: 0;
@@ -85,24 +66,23 @@ button {
   align-items: stretch;
 }
 
-.todo-list-item {
+.task-list {
   width: 100%;
 }
 
-.todo-list-item .inputtext {
+.task-list .inputtext {
   flex-grow: 1;
-  margin: 0 1rem;
   padding: 0;
   border: none;
   background: none;
 }
 
-.todo-list-item.completed .inputtext {
+.task-list.completed .inputtext {
   text-decoration: line-through;
 }
 
-.todo-list-item input,
-.todo-list-item button {
+.task-list input,
+.task-list button {
   flex-grow: 0;
   flex-shrink: 0;
   flex-basis: 2.5rem;
@@ -111,29 +91,33 @@ button {
   padding: 0;
 }
 
-.todo-list-item input {
-  width: 1.5rem;
-  height: 1.5rem;
-  display: inline-block;
-}
-
-.todo-list-item button {
+.task-list button {
   border: none;
   background: none;
   font-size: 100%;
   line-height: 100%;
 }
 
-.todo-list-item button:hover {
-  transform: scale(1.1);
+.task-list button:hover {
+  transform: scale(1.5);
 }
 
-.todo-list-item button:active,
-.todo-list-item button:focus {
-  transform: scale(0.9);
-  outline: none;
+.task-list button:active,
+.task-list button:focus {
+  transform: scale(1.1);
+  outline:invert;
 }
 
 .clearComplete {
-  height: 40px;
+  height: 39px;
+  background: navajowhite;
+  border: 1px solid #f3b14e;
+  border-radius: 0 0 10px 10px;
+  border-top: none;
+  cursor: pointer;
+}
+
+.clearComplete:hover {
+  background: rgb(249, 201, 128);
+  color: #fff;
 }
