@@ -35,7 +35,7 @@ button {
   background: none;
 }
 
-.form-sec{
+.form-sec {
   background: navajowhite;
   border: 1px solid #f3b14e;
   border-radius: 10px 10px 0 0;
@@ -50,8 +50,8 @@ button {
   cursor: pointer;
 }
 
-.form-sec .fill button:hover{
-  background-color: #ffffff;
+.form-sec .fill button:hover {
+  background-color: #fff;
   color: rgb(1, 1, 1);
 }
 
@@ -105,7 +105,7 @@ button {
 .task-list button:active,
 .task-list button:focus {
   transform: scale(1.1);
-  outline:invert;
+  outline: invert;
 }
 
 .clearComplete {
