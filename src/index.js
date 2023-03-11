@@ -1,22 +1,104 @@
 import './style.css';
+import tasksRefactor from '../modules/TaskHandle.js';
 
-const toDoTasks = [{
-  description: 'Eat food',
-  completed: false,
-  index: 0,
-}, {
-  description: 'sleep',
-  completed: false,
-  index: 1,
-}, {
-  description: 'Watch videos',
-  completed: false,
-  index: 2,
-}];
+const newTodoForm = document.querySelector('#form-sec');
+const todoList = document.querySelector('.task-section');
+const removeMarked = document.querySelector('.clearComplete');
 
-const listContainer = document.querySelector('.to-do');
+const updateInputText = (id, newText) => {
+  const todoListArray = JSON.parse(localStorage.getItem('todos') || '[]');
+  const targetIndex = todoListArray.findIndex((todo) => todo.id === parseInt(id, 10));
 
-toDoTasks.forEach((task) => {
-  listContainer.innerHTML += `
-  <li class="listItem"><input type="checkbox" class="check" id="${task.index}">${task.description} <i class="fa-solid icon fa-ellipsis-vertical"></i></li>`;
+  if (targetIndex >= 0) {
+    todoListArray[targetIndex].description = newText;
+    localStorage.setItem('todos', JSON.stringify(todoListArray));
+    tasksRefactor(todoListArray);
+  }
+};
+
+const toggleComplete = (id) => {
+  const todoListArray = JSON.parse(localStorage.getItem('todos') || '[]');
+  const updateTodoList = todoListArray.map((todo) => {
+    if (todo.id === parseInt(id, 10)) {
+      return { ...todo, completed: !todo.completed };
+    }
+    return todo;
+  });
+
+  tasksRefactor(updateTodoList);
+  // eslint-disable-next-line no-restricted-globals
+  location.reload();
+};
+
+const removeCompleted = () => {
+  const updtArr = [];
+  const todoListArray = JSON.parse(localStorage.getItem('todos') || '[]');
+
+  // eslint-disable-next-line no-restricted-syntax
+  for (const todo of todoListArray) {
+    if (!todo.completed) {
+      updtArr.push(todo);
+    }
+  }
+
+  localStorage.setItem('todos', JSON.stringify(updtArr));
+  tasksRefactor(updtArr);
+};
+
+const removeTodo = (targetIndex) => {
+  const todoListArr = JSON.parse(localStorage.getItem('todos') || '[]');
+  const updateList = todoListArr.filter((todo) => todo.id !== parseInt(targetIndex, 10));
+  tasksRefactor(updateList);
+  // eslint-disable-next-line no-restricted-globals
+  location.reload();
+};
+
+const updateList = (todos) => {
+  const description = todos.map((todo) => `
+            <li class="fill task-list ${todo.completed ? 'completed' : ''}" data-id="${todo.id}">
+              <input type="checkbox" ${todo.completed ? 'checked' : ''} class="checkbox"/>
+              <input type="text" value="${todo.description}" class="inputtext" id="${todo.id}"/>
+              <button type="button"><i class="fa-solid fa-trash-can"></i></button>
+            </li>
+          `).join('');
+
+  todoList.innerHTML = description;
+  const enteredTexts = todoList.querySelectorAll('.task-list input[type=text]');
+
+  enteredTexts.forEach((input) => input.addEventListener('change', (e) => updateInputText(input.id, e.target.value)));
+
+  const erase = todoList.querySelectorAll('.task-list button');
+
+  erase.forEach((button) => button.addEventListener('click', () => removeTodo(button.parentNode.getAttribute('data-id'))));
+
+  const checkedUP = todoList.querySelectorAll('.checkbox');
+  checkedUP.forEach((checkbox) => checkbox.addEventListener('click', () => toggleComplete(checkbox.parentNode.getAttribute('data-id'))));
+};
+
+const newTodo = (e) => {
+  e.preventDefault();
+  const newTask = document.getElementById('taskInput').value;
+  const todos = JSON.parse(localStorage.getItem('todos') || '[]');
+
+  const newTodo = {
+    description: newTask,
+    completed: false,
+    id: Date.now(),
+  };
+
+  document.getElementById('taskInput').value = '';
+  localStorage.setItem('todos', JSON.stringify([...todos, newTodo]));
+  updateList([...todos, newTodo]);
+};
+
+const addDisplay = () => {
+  newTodoForm.addEventListener('submit', newTodo);
+  const todos = JSON.parse(localStorage.getItem('todos') || '[]');
+  updateList(todos);
+};
+
+removeMarked.addEventListener('click', () => {
+  removeCompleted();
 });
+
+addDisplay();
