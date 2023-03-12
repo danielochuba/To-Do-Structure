@@ -72,7 +72,7 @@
 
 > Add a link to your deployed project.
 
-- [Live Demo Link](https://danielochuba.github.io/To-Do-Structure/dist/)
+- [Live Demo Link](https://danielochuba.github.io/To-Do-Structure/dist/index.html)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
