@@ -5,9 +5,7 @@ const taskSection = document.querySelector('.task-section');
  */
 const tasksRefactor = (newTodos) => {
   const updtArr = newTodos.map((todo, index) => ({ ...todo, id: index + 1 }));
-
   localStorage.setItem('todos', JSON.stringify(updtArr));
-
   const description = updtArr.map(
     (task) => `
         <li class="fill task-list ${task.completed ? 'completed' : ''}" data-id="${task.id}">
